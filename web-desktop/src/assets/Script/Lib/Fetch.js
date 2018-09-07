@@ -1,1 +1,357 @@
-!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):t.ES6Promise=e()}(this,function(){"use strict";function t(t){return"function"==typeof t}function e(){var t=setTimeout;return function(){return t(r,1)}}function r(){for(var t=0;t<w;t+=2){(0,j[t])(j[t+1]),j[t]=void 0,j[t+1]=void 0}w=0}function n(t,e){var r=arguments,n=this,o=new this.constructor(i);void 0===o[D]&&v(o);var s=n._state;return s?function(){var t=r[s-1];T(function(){return y(s,o,t,n._result)})}():l(n,o,t,e),o}function o(t){if(t&&"object"==typeof t&&t.constructor===this)return t;var e=new this(i);return a(e,t),e}function i(){}function s(t){try{return t.then}catch(t){return H.error=t,H}}function u(e,r,i){r.constructor===e.constructor&&i===n&&r.constructor.resolve===o?function(t,e){e._state===F?f(t,e._result):e._state===q?h(t,e._result):l(e,void 0,function(e){return a(t,e)},function(e){return h(t,e)})}(e,r):i===H?h(e,H.error):void 0===i?f(e,r):t(i)?function(t,e,r){T(function(t){var n=!1,o=function(t,e,r,n){try{t.call(e,r,n)}catch(t){return t}}(r,e,function(r){n||(n=!0,e!==r?a(t,r):f(t,r))},function(e){n||(n=!0,h(t,e))},t._label);!n&&o&&(n=!0,h(t,o))},t)}(e,r,i):f(e,r)}function a(t,e){t===e?h(t,new TypeError("You cannot resolve a promise with itself")):function(t){return"function"==typeof t||"object"==typeof t&&null!==t}(e)?u(t,e,s(e)):f(t,e)}function c(t){t._onerror&&t._onerror(t._result),p(t)}function f(t,e){t._state===B&&(t._result=e,t._state=F,0!==t._subscribers.length&&T(p,t))}function h(t,e){t._state===B&&(t._state=q,t._result=e,T(c,t))}function l(t,e,r,n){var o=t._subscribers,i=o.length;t._onerror=null,o[i]=e,o[i+F]=r,o[i+q]=n,0===i&&t._state&&T(p,t)}function p(t){var e=t._subscribers,r=t._state;if(0!==e.length){for(var n=void 0,o=void 0,i=t._result,s=0;s<e.length;s+=3)n=e[s],o=e[s+r],n?y(r,n,o,i):o(i);t._subscribers.length=0}}function d(){this.error=null}function y(e,r,n,o){var i=t(n),s=void 0,u=void 0,c=void 0,l=void 0;if(i){if((s=function(t,e){try{return t(e)}catch(t){return M.error=t,M}}(n,o))===M?(l=!0,u=s.error,s=null):c=!0,r===s)return void h(r,new TypeError("A promises callback cannot return that same promise."))}else s=o,c=!0;r._state!==B||(i&&c?a(r,s):l?h(r,u):e===F?f(r,s):e===q&&h(r,s))}function v(t){t[D]=U++,t._state=void 0,t._result=void 0,t._subscribers=[]}function m(t,e){this._instanceConstructor=t,this.promise=new t(i),this.promise[D]||v(this.promise),_(e)?(this._input=e,this.length=e.length,this._remaining=e.length,this._result=new Array(this.length),0===this.length?f(this.promise,this._result):(this.length=this.length||0,this._enumerate(),0===this._remaining&&f(this.promise,this._result))):h(this.promise,new Error("Array Methods must be provided an Array"))}function b(t){this[D]=U++,this._result=this._state=void 0,this._subscribers=[],i!==t&&("function"!=typeof t&&function(){throw new TypeError("You must pass a resolver function as the first argument to the promise constructor")}(),this instanceof b?function(t,e){try{e(function(e){a(t,e)},function(e){h(t,e)})}catch(e){h(t,e)}}(this,t):function(){throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.")}())}var _=Array.isArray?Array.isArray:function(t){return"[object Array]"===Object.prototype.toString.call(t)},w=0,g=void 0,E=void 0,T=function(t,e){j[w]=t,j[w+1]=e,2===(w+=2)&&(E?E(r):S())},A="undefined"!=typeof window?window:void 0,P=A||{},x=P.MutationObserver||P.WebKitMutationObserver,O="undefined"==typeof self&&"undefined"!=typeof process&&"[object process]"==={}.toString.call(process),R="undefined"!=typeof Uint8ClampedArray&&"undefined"!=typeof importScripts&&"undefined"!=typeof MessageChannel,j=new Array(1e3),S=void 0;S=O?function(){return process.nextTick(r)}:x?function(){var t=0,e=new x(r),n=document.createTextNode("");return e.observe(n,{characterData:!0}),function(){n.data=t=++t%2}}():R?function(){var t=new MessageChannel;return t.port1.onmessage=r,function(){return t.port2.postMessage(0)}}():void 0===A&&"function"==typeof require?function(){try{var t=require("vertx");return void 0!==(g=t.runOnLoop||t.runOnContext)?function(){g(r)}:e()}catch(t){return e()}}():e();var D=Math.random().toString(36).substring(16),B=void 0,F=1,q=2,H=new d,M=new d,U=0;return m.prototype._enumerate=function(){for(var t=this.length,e=this._input,r=0;this._state===B&&r<t;r++)this._eachEntry(e[r],r)},m.prototype._eachEntry=function(t,e){var r=this._instanceConstructor,a=r.resolve;if(a===o){var c=s(t);if(c===n&&t._state!==B)this._settledAt(t._state,e,t._result);else if("function"!=typeof c)this._remaining--,this._result[e]=t;else if(r===b){var f=new r(i);u(f,t,c),this._willSettleAt(f,e)}else this._willSettleAt(new r(function(e){return e(t)}),e)}else this._willSettleAt(a(t),e)},m.prototype._settledAt=function(t,e,r){var n=this.promise;n._state===B&&(this._remaining--,t===q?h(n,r):this._result[e]=r),0===this._remaining&&f(n,this._result)},m.prototype._willSettleAt=function(t,e){var r=this;l(t,void 0,function(t){return r._settledAt(F,e,t)},function(t){return r._settledAt(q,e,t)})},b.all=function(t){return new m(this,t).promise},b.race=function(t){var e=this;return new e(_(t)?function(r,n){for(var o=t.length,i=0;i<o;i++)e.resolve(t[i]).then(r,n)}:function(t,e){return e(new TypeError("You must pass an array to race."))})},b.resolve=o,b.reject=function(t){var e=new this(i);return h(e,t),e},b._setScheduler=function(t){E=t},b._setAsap=function(t){T=t},b._asap=T,b.prototype={constructor:b,then:n,catch:function(t){return this.then(null,t)}},b.polyfill=function(){var t=void 0;if("undefined"!=typeof global)t=global;else if("undefined"!=typeof self)t=self;else try{t=Function("return this")()}catch(t){throw new Error("polyfill failed because global object is unavailable in this environment")}var e=t.Promise;if(e){var r=null;try{r=Object.prototype.toString.call(e.resolve())}catch(t){}if("[object Promise]"===r&&!e.cast)return}t.Promise=b},b.Promise=b,b}),ES6Promise.polyfill(),function(t){"use strict";if(!t.fetch){s.prototype.append=function(t,e){t=o(t),e=i(e);var r=this.map[t];r||(r=[],this.map[t]=r),r.push(e)},s.prototype.delete=function(t){delete this.map[o(t)]},s.prototype.get=function(t){var e=this.map[o(t)];return e?e[0]:null},s.prototype.getAll=function(t){return this.map[o(t)]||[]},s.prototype.has=function(t){return this.map.hasOwnProperty(o(t))},s.prototype.set=function(t,e){this.map[o(t)]=[i(e)]},s.prototype.forEach=function(t){var e=this;Object.getOwnPropertyNames(this.map).forEach(function(r){t(r,e.map[r])})};var e={blob:"FileReader"in t&&"Blob"in t&&function(){try{return new Blob,!0}catch(t){return!1}}(),formData:"FormData"in t},r=["DELETE","GET","HEAD","OPTIONS","POST","PUT"],n=!("undefined"==typeof window||!window.ActiveXObject||window.XMLHttpRequest&&(new XMLHttpRequest).dispatchEvent);f.call(h.prototype),f.call(p.prototype),t.Headers=s,t.Request=h,t.Response=p,t.fetch=function(r,o){var i;return i=h.prototype.isPrototypeOf(r)&&!o?r:new h(r,o),new fetch.Promise(function(r,o){var u=function(){return n&&!/^(get|post|head|put|delete|options)$/i.test(this.method)?(this.usingActiveXhr=!0,new ActiveXObject("Microsoft.XMLHTTP")):new XMLHttpRequest}();function a(){if(4===u.readyState){var t=1223===u.status?204:u.status;if(t<100||t>599)o(new TypeError("Network request failed"));else{var e={status:t,statusText:u.statusText,headers:function(t){var e=new s;return t.getAllResponseHeaders().trim().split("\n").forEach(function(t){var r=t.trim().split(":"),n=r.shift().trim(),o=r.join(":").trim();e.append(n,o)}),e}(u),url:"responseURL"in u?u.responseURL:/^X-Request-URL:/m.test(u.getAllResponseHeaders())?u.getResponseHeader("X-Request-URL"):void 0},n="response"in u?u.response:u.responseText;r(new p(n,e))}}}"cors"===i.credentials&&(u.withCredentials=!0),u.onreadystatechange=a,t.usingActiveXhr||(u.onload=a,u.onerror=function(){o(new TypeError("Network request failed"))}),u.open(i.method,i.url,!0),"responseType"in u&&e.blob&&(u.responseType="blob"),i.headers.forEach(function(t,e){e.forEach(function(e){u.setRequestHeader(t,e)})}),u.send()})},fetch.Promise=t.Promise,t.fetch.polyfill=!0}function o(t){if("string"!=typeof t&&(t=t.toString()),/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(t))throw new TypeError("Invalid character in header field name");return t.toLowerCase()}function i(t){return"string"!=typeof t&&(t=t.toString()),t}function s(t){this.map={};var e=this;t instanceof s?t.forEach(function(t,r){r.forEach(function(r){e.append(t,r)})}):t&&Object.getOwnPropertyNames(t).forEach(function(r){e.append(r,t[r])})}function u(t){if(t.bodyUsed)return fetch.Promise.reject(new TypeError("Already read"));t.bodyUsed=!0}function a(t){return new fetch.Promise(function(e,r){t.onload=function(){e(t.result)},t.onerror=function(){r(t.error)}})}function c(t){var e=new FileReader;return e.readAsArrayBuffer(t),a(e)}function f(){return this.bodyUsed=!1,this._initBody=function(t){if(this._bodyInit=t,"string"==typeof t)this._bodyText=t;else if(e.blob&&Blob.prototype.isPrototypeOf(t))this._bodyBlob=t;else if(e.formData&&FormData.prototype.isPrototypeOf(t))this._bodyFormData=t;else{if(t)throw new Error("unsupported BodyInit type");this._bodyText=""}},e.blob?(this.blob=function(){var t=u(this);if(t)return t;if(this._bodyBlob)return fetch.Promise.resolve(this._bodyBlob);if(this._bodyFormData)throw new Error("could not read FormData body as blob");return fetch.Promise.resolve(new Blob([this._bodyText]))},this.arrayBuffer=function(){return this.blob().then(c)},this.text=function(){var t=u(this);if(t)return t;if(this._bodyBlob)return function(t){var e=new FileReader;return e.readAsText(t),a(e)}(this._bodyBlob);if(this._bodyFormData)throw new Error("could not read FormData body as text");return fetch.Promise.resolve(this._bodyText)}):this.text=function(){var t=u(this);return t||fetch.Promise.resolve(this._bodyText)},e.formData&&(this.formData=function(){return this.text().then(l)}),this.json=function(){return this.text().then(function(t){return JSON.parse(t)})},this}function h(t,e){if(e=e||{},this.url=t,this.credentials=e.credentials||"omit",this.headers=new s(e.headers),this.method=function(t){var e=t.toUpperCase();return r.indexOf(e)>-1?e:t}(e.method||"GET"),this.mode=e.mode||null,this.referrer=null,("GET"===this.method||"HEAD"===this.method)&&e.body)throw new TypeError("Body not allowed for GET or HEAD requests");this._initBody(e.body)}function l(t){var e=new FormData;return t.trim().split("&").forEach(function(t){if(t){var r=t.split("="),n=r.shift().replace(/\+/g," "),o=r.join("=").replace(/\+/g," ");e.append(decodeURIComponent(n),decodeURIComponent(o))}}),e}function p(t,e){e||(e={}),this._initBody(t),this.type="default",this.url=null,this.status=e.status,this.ok=this.status>=200&&this.status<300,this.statusText=e.statusText,this.headers=e.headers instanceof s?e.headers:new s(e.headers),this.url=e.url||""}}(window);
+!function(t,e){"object"==typeof exports&&"undefined"!=typeof module?module.exports=e():"function"==typeof define&&define.amd?define(e):t.ES6Promise=e()}(this,function(){"use strict";function t(t){return"function"==typeof t||"object"==typeof t&&null!==t}function e(t){return"function"==typeof t}function n(t){I=t}function r(t){J=t}function o(){return function(){return process.nextTick(a)}}function i(){return"undefined"!=typeof H?function(){H(a)}:c()}function s(){var t=0,e=new V(a),n=document.createTextNode("");return e.observe(n,{characterData:!0}),function(){n.data=t=++t%2}}function u(){var t=new MessageChannel;return t.port1.onmessage=a,function(){return t.port2.postMessage(0)}}function c(){var t=setTimeout;return function(){return t(a,1)}}function a(){for(var t=0;t<G;t+=2){var e=$[t],n=$[t+1];e(n),$[t]=void 0,$[t+1]=void 0}G=0}function f(){try{var t=require,e=t("vertx");return H=e.runOnLoop||e.runOnContext,i()}catch(n){return c()}}function l(t,e){var n=arguments,r=this,o=new this.constructor(p);void 0===o[et]&&k(o);var i=r._state;return i?!function(){var t=n[i-1];J(function(){return x(i,o,t,r._result)})}():E(r,o,t,e),o}function h(t){var e=this;if(t&&"object"==typeof t&&t.constructor===e)return t;var n=new e(p);return g(n,t),n}function p(){}function v(){return new TypeError("You cannot resolve a promise with itself")}function d(){return new TypeError("A promises callback cannot return that same promise.")}function _(t){try{return t.then}catch(e){return it.error=e,it}}function y(t,e,n,r){try{t.call(e,n,r)}catch(o){return o}}function m(t,e,n){J(function(t){var r=!1,o=y(n,e,function(n){r||(r=!0,e!==n?g(t,n):S(t,n))},function(e){r||(r=!0,j(t,e))},"Settle: "+(t._label||" unknown promise"));!r&&o&&(r=!0,j(t,o))},t)}function b(t,e){e._state===rt?S(t,e._result):e._state===ot?j(t,e._result):E(e,void 0,function(e){return g(t,e)},function(e){return j(t,e)})}function w(t,n,r){n.constructor===t.constructor&&r===l&&n.constructor.resolve===h?b(t,n):r===it?j(t,it.error):void 0===r?S(t,n):e(r)?m(t,n,r):S(t,n)}function g(e,n){e===n?j(e,v()):t(n)?w(e,n,_(n)):S(e,n)}function A(t){t._onerror&&t._onerror(t._result),P(t)}function S(t,e){t._state===nt&&(t._result=e,t._state=rt,0!==t._subscribers.length&&J(P,t))}function j(t,e){t._state===nt&&(t._state=ot,t._result=e,J(A,t))}function E(t,e,n,r){var o=t._subscribers,i=o.length;t._onerror=null,o[i]=e,o[i+rt]=n,o[i+ot]=r,0===i&&t._state&&J(P,t)}function P(t){var e=t._subscribers,n=t._state;if(0!==e.length){for(var r=void 0,o=void 0,i=t._result,s=0;s<e.length;s+=3)r=e[s],o=e[s+n],r?x(n,r,o,i):o(i);t._subscribers.length=0}}function T(){this.error=null}function M(t,e){try{return t(e)}catch(n){return st.error=n,st}}function x(t,n,r,o){var i=e(r),s=void 0,u=void 0,c=void 0,a=void 0;if(i){if(s=M(r,o),s===st?(a=!0,u=s.error,s=null):c=!0,n===s)return void j(n,d())}else s=o,c=!0;n._state!==nt||(i&&c?g(n,s):a?j(n,u):t===rt?S(n,s):t===ot&&j(n,s))}function C(t,e){try{e(function(e){g(t,e)},function(e){j(t,e)})}catch(n){j(t,n)}}function O(){return ut++}function k(t){t[et]=ut++,t._state=void 0,t._result=void 0,t._subscribers=[]}function Y(t,e){this._instanceConstructor=t,this.promise=new t(p),this.promise[et]||k(this.promise),B(e)?(this._input=e,this.length=e.length,this._remaining=e.length,this._result=new Array(this.length),0===this.length?S(this.promise,this._result):(this.length=this.length||0,this._enumerate(),0===this._remaining&&S(this.promise,this._result))):j(this.promise,q())}function q(){return new Error("Array Methods must be provided an Array")}function F(t){return new Y(this,t).promise}function D(t){var e=this;return new e(B(t)?function(n,r){for(var o=t.length,i=0;i<o;i++)e.resolve(t[i]).then(n,r)}:function(t,e){return e(new TypeError("You must pass an array to race."))})}function K(t){var e=this,n=new e(p);return j(n,t),n}function L(){throw new TypeError("You must pass a resolver function as the first argument to the promise constructor")}function N(){throw new TypeError("Failed to construct 'Promise': Please use the 'new' operator, this object constructor cannot be called as a function.")}function U(t){this[et]=O(),this._result=this._state=void 0,this._subscribers=[],p!==t&&("function"!=typeof t&&L(),this instanceof U?C(this,t):N())}function W(){var t=void 0;if("undefined"!=typeof global)t=global;else if("undefined"!=typeof self)t=self;else try{t=Function("return this")()}catch(e){throw new Error("polyfill failed because global object is unavailable in this environment")}var n=t.Promise;if(n){var r=null;try{r=Object.prototype.toString.call(n.resolve())}catch(e){}if("[object Promise]"===r&&!n.cast)return}t.Promise=U}var z=void 0;z=Array.isArray?Array.isArray:function(t){return"[object Array]"===Object.prototype.toString.call(t)};var B=z,G=0,H=void 0,I=void 0,J=function(t,e){$[G]=t,$[G+1]=e,G+=2,2===G&&(I?I(a):tt())},Q="undefined"!=typeof window?window:void 0,R=Q||{},V=R.MutationObserver||R.WebKitMutationObserver,X="undefined"==typeof self&&"undefined"!=typeof process&&"[object process]"==={}.toString.call(process),Z="undefined"!=typeof Uint8ClampedArray&&"undefined"!=typeof importScripts&&"undefined"!=typeof MessageChannel,$=new Array(1e3),tt=void 0;tt=X?o():V?s():Z?u():void 0===Q&&"function"==typeof require?f():c();var et=Math.random().toString(36).substring(16),nt=void 0,rt=1,ot=2,it=new T,st=new T,ut=0;return Y.prototype._enumerate=function(){for(var t=this.length,e=this._input,n=0;this._state===nt&&n<t;n++)this._eachEntry(e[n],n)},Y.prototype._eachEntry=function(t,e){var n=this._instanceConstructor,r=n.resolve;if(r===h){var o=_(t);if(o===l&&t._state!==nt)this._settledAt(t._state,e,t._result);else if("function"!=typeof o)this._remaining--,this._result[e]=t;else if(n===U){var i=new n(p);w(i,t,o),this._willSettleAt(i,e)}else this._willSettleAt(new n(function(e){return e(t)}),e)}else this._willSettleAt(r(t),e)},Y.prototype._settledAt=function(t,e,n){var r=this.promise;r._state===nt&&(this._remaining--,t===ot?j(r,n):this._result[e]=n),0===this._remaining&&S(r,this._result)},Y.prototype._willSettleAt=function(t,e){var n=this;E(t,void 0,function(t){return n._settledAt(rt,e,t)},function(t){return n._settledAt(ot,e,t)})},U.all=F,U.race=D,U.resolve=h,U.reject=K,U._setScheduler=n,U._setAsap=r,U._asap=J,U.prototype={constructor:U,then:l,"catch":function(t){return this.then(null,t)}},U.polyfill=W,U.Promise=U,U}),ES6Promise.polyfill();
+(function(self) {
+    'use strict';
+
+    if (self.fetch) {
+        return
+    }
+
+    function normalizeName(name) {
+        if (typeof name !== 'string') {
+            name = name.toString();
+        }
+        if (/[^a-z0-9\-#$%&'*+.\^_`|~]/i.test(name)) {
+            throw new TypeError('Invalid character in header field name')
+        }
+        return name.toLowerCase()
+    }
+
+    function normalizeValue(value) {
+        if (typeof value !== 'string') {
+            value = value.toString();
+        }
+        return value
+    }
+
+    function Headers(headers) {
+        this.map = {}
+
+        var self = this
+        if (headers instanceof Headers) {
+            headers.forEach(function(name, values) {
+                values.forEach(function(value) {
+                    self.append(name, value)
+                })
+            })
+
+        } else if (headers) {
+            Object.getOwnPropertyNames(headers).forEach(function(name) {
+                self.append(name, headers[name])
+            })
+        }
+    }
+
+    Headers.prototype.append = function(name, value) {
+        name = normalizeName(name)
+        value = normalizeValue(value)
+        var list = this.map[name]
+        if (!list) {
+            list = []
+            this.map[name] = list
+        }
+        list.push(value)
+    }
+
+    Headers.prototype['delete'] = function(name) {
+        delete this.map[normalizeName(name)]
+    }
+
+    Headers.prototype.get = function(name) {
+        var values = this.map[normalizeName(name)]
+        return values ? values[0] : null
+    }
+
+    Headers.prototype.getAll = function(name) {
+        return this.map[normalizeName(name)] || []
+    }
+
+    Headers.prototype.has = function(name) {
+        return this.map.hasOwnProperty(normalizeName(name))
+    }
+
+    Headers.prototype.set = function(name, value) {
+        this.map[normalizeName(name)] = [normalizeValue(value)]
+    }
+
+    // Instead of iterable for now.
+    Headers.prototype.forEach = function(callback) {
+        var self = this
+        Object.getOwnPropertyNames(this.map).forEach(function(name) {
+            callback(name, self.map[name])
+        })
+    }
+
+    function consumed(body) {
+        if (body.bodyUsed) {
+            return fetch.Promise.reject(new TypeError('Already read'))
+        }
+        body.bodyUsed = true
+    }
+
+    function fileReaderReady(reader) {
+        return new fetch.Promise(function(resolve, reject) {
+            reader.onload = function() {
+                resolve(reader.result)
+            }
+            reader.onerror = function() {
+                reject(reader.error)
+            }
+        })
+    }
+
+    function readBlobAsArrayBuffer(blob) {
+        var reader = new FileReader()
+        reader.readAsArrayBuffer(blob)
+        return fileReaderReady(reader)
+    }
+
+    function readBlobAsText(blob) {
+        var reader = new FileReader()
+        reader.readAsText(blob)
+        return fileReaderReady(reader)
+    }
+
+    var support = {
+        blob: 'FileReader' in self && 'Blob' in self && (function() {
+            try {
+                new Blob();
+                return true
+            } catch (e) {
+                return false
+            }
+        })(),
+        formData: 'FormData' in self
+    }
+
+    function Body() {
+        this.bodyUsed = false
+
+
+        this._initBody = function(body) {
+            this._bodyInit = body
+            if (typeof body === 'string') {
+                this._bodyText = body
+            } else if (support.blob && Blob.prototype.isPrototypeOf(body)) {
+                this._bodyBlob = body
+            } else if (support.formData && FormData.prototype.isPrototypeOf(body)) {
+                this._bodyFormData = body
+            } else if (!body) {
+                this._bodyText = ''
+            } else {
+                throw new Error('unsupported BodyInit type')
+            }
+        }
+
+        if (support.blob) {
+            this.blob = function() {
+                var rejected = consumed(this)
+                if (rejected) {
+                    return rejected
+                }
+
+                if (this._bodyBlob) {
+                    return fetch.Promise.resolve(this._bodyBlob)
+                } else if (this._bodyFormData) {
+                    throw new Error('could not read FormData body as blob')
+                } else {
+                    return fetch.Promise.resolve(new Blob([this._bodyText]))
+                }
+            }
+
+            this.arrayBuffer = function() {
+                return this.blob().then(readBlobAsArrayBuffer)
+            }
+
+            this.text = function() {
+                var rejected = consumed(this)
+                if (rejected) {
+                    return rejected
+                }
+
+                if (this._bodyBlob) {
+                    return readBlobAsText(this._bodyBlob)
+                } else if (this._bodyFormData) {
+                    throw new Error('could not read FormData body as text')
+                } else {
+                    return fetch.Promise.resolve(this._bodyText)
+                }
+            }
+        } else {
+            this.text = function() {
+                var rejected = consumed(this)
+                return rejected ? rejected : fetch.Promise.resolve(this._bodyText)
+            }
+        }
+
+        if (support.formData) {
+            this.formData = function() {
+                return this.text().then(decode)
+            }
+        }
+
+        this.json = function() {
+            return this.text().then(function(text) {
+                return JSON.parse(text);
+            });
+        }
+
+        return this
+    }
+
+    // HTTP methods whose capitalization should be normalized
+    var methods = ['DELETE', 'GET', 'HEAD', 'OPTIONS', 'POST', 'PUT']
+
+    function normalizeMethod(method) {
+        var upcased = method.toUpperCase()
+        return (methods.indexOf(upcased) > -1) ? upcased : method
+    }
+
+    function Request(url, options) {
+        options = options || {}
+        this.url = url
+
+        this.credentials = options.credentials || 'omit'
+        this.headers = new Headers(options.headers)
+        this.method = normalizeMethod(options.method || 'GET')
+        this.mode = options.mode || null
+        this.referrer = null
+
+        if ((this.method === 'GET' || this.method === 'HEAD') && options.body) {
+            throw new TypeError('Body not allowed for GET or HEAD requests')
+        }
+        this._initBody(options.body)
+    }
+
+    function decode(body) {
+        var form = new FormData()
+        body.trim().split('&').forEach(function(bytes) {
+            if (bytes) {
+                var split = bytes.split('=')
+                var name = split.shift().replace(/\+/g, ' ')
+                var value = split.join('=').replace(/\+/g, ' ')
+                form.append(decodeURIComponent(name), decodeURIComponent(value))
+            }
+        })
+        return form
+    }
+
+    function headers(xhr) {
+        var head = new Headers()
+        var pairs = xhr.getAllResponseHeaders().trim().split('\n')
+        pairs.forEach(function(header) {
+            var split = header.trim().split(':')
+            var key = split.shift().trim()
+            var value = split.join(':').trim()
+            head.append(key, value)
+        })
+        return head
+    }
+
+    var noXhrPatch =
+        typeof window !== 'undefined' && !!window.ActiveXObject && !(window.XMLHttpRequest && (new XMLHttpRequest).dispatchEvent);
+
+    function getXhr() {
+        // from backbone.js 1.1.2
+        // https://github.com/jashkenas/backbone/blob/1.1.2/backbone.js#L1181
+        if (noXhrPatch && !(/^(get|post|head|put|delete|options)$/i.test(this.method))) {
+            this.usingActiveXhr = true;
+            return new ActiveXObject("Microsoft.XMLHTTP");
+        }
+        return new XMLHttpRequest();
+    }
+
+    Body.call(Request.prototype)
+
+    function Response(bodyInit, options) {
+        if (!options) {
+            options = {}
+        }
+
+        this._initBody(bodyInit)
+        this.type = 'default'
+        this.url = null
+        this.status = options.status
+        this.ok = this.status >= 200 && this.status < 300
+        this.statusText = options.statusText
+        this.headers = options.headers instanceof Headers ? options.headers : new Headers(options.headers)
+        this.url = options.url || ''
+    }
+
+    Body.call(Response.prototype)
+
+    self.Headers = Headers;
+    self.Request = Request;
+    self.Response = Response;
+
+    self.fetch = function(input, init) {
+        // TODO: Request constructor should accept input, init
+        var request
+        if (Request.prototype.isPrototypeOf(input) && !init) {
+            request = input
+        } else {
+            request = new Request(input, init)
+        }
+
+        return new fetch.Promise(function(resolve, reject) {
+            var xhr = getXhr();
+            if (request.credentials === 'cors') {
+                xhr.withCredentials = true;
+            }
+
+            function responseURL() {
+                if ('responseURL' in xhr) {
+                    return xhr.responseURL
+                }
+
+                // Avoid security warnings on getResponseHeader when not allowed by CORS
+                if (/^X-Request-URL:/m.test(xhr.getAllResponseHeaders())) {
+                    return xhr.getResponseHeader('X-Request-URL')
+                }
+
+                return;
+            }
+
+            function onload() {
+                if (xhr.readyState !== 4) {
+                    return
+                }
+                var status = (xhr.status === 1223) ? 204 : xhr.status
+                if (status < 100 || status > 599) {
+                    reject(new TypeError('Network request failed'))
+                    return
+                }
+                var options = {
+                    status: status,
+                    statusText: xhr.statusText,
+                    headers: headers(xhr),
+                    url: responseURL()
+                }
+                var body = 'response' in xhr ? xhr.response : xhr.responseText;
+                resolve(new Response(body, options))
+            }
+
+            xhr.onreadystatechange = onload;
+            if (!self.usingActiveXhr) {
+                xhr.onload = onload;
+                xhr.onerror = function() {
+                    reject(new TypeError('Network request failed'))
+                }
+            }
+
+            xhr.open(request.method, request.url, true)
+
+            if ('responseType' in xhr && support.blob) {
+                xhr.responseType = 'blob'
+            }
+
+            request.headers.forEach(function(name, values) {
+                values.forEach(function(value) {
+                    xhr.setRequestHeader(name, value)
+                })
+            })
+            xhr.send()
+        })
+    }
+    fetch.Promise = self.Promise; // you could change it to your favorite alternative
+    self.fetch.polyfill = true
+})(window);
