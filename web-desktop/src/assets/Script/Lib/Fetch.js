@@ -232,7 +232,7 @@
                 form.append(decodeURIComponent(name), decodeURIComponent(value))
             }
         })
-        return form
+        return form;
     }
 
     function headers(xhr) {
